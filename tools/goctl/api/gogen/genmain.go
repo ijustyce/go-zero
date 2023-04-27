@@ -14,6 +14,9 @@ import (
 //go:embed main.tpl
 var mainTemplate string
 
+//go:embed sub-main.tpl
+var subMainTemplate string
+
 func genSubMain(dir, rootPkg, moduleName string, cfg *config.Config, api *spec.ApiSpec) error {
 	arr := strings.Split(rootPkg, "/")
 	packageName := arr[len(arr)-1]
@@ -22,10 +25,10 @@ func genSubMain(dir, rootPkg, moduleName string, cfg *config.Config, api *spec.A
 		dir:             dir,
 		subdir:          "",
 		filename:        packageName + ".go",
-		templateName:    "mainTemplate",
+		templateName:    "subMainTemplate",
 		category:        category,
 		templateFile:    subMainTemplateFile,
-		builtinTemplate: mainTemplate,
+		builtinTemplate: subMainTemplate,
 		data: map[string]string{
 			"importPackages": genSubMainImports(rootPkg, moduleName),
 			"packageName":    packageName,

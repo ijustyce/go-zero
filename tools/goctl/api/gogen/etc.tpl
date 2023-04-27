@@ -1,3 +1,20 @@
 Name: {{.serviceName}}
 Host: {{.host}}
 Port: {{.port}}
+Verbose: false
+MaxConns: 10000
+MaxBytes: 1048576
+Timeout: 5000
+CpuThreshold: 900
+Middlewares:
+  Trace: false
+  Log: true
+  Prometheus: false
+  MaxConns: false
+  Breaker: false
+  Shedding: false
+  Timeout: false
+  Recover: true
+  Metrics: false
+  MaxBytes: false
+  Gunzip: true

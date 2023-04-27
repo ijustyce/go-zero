@@ -20,8 +20,8 @@ func main() {
 
 	ctx := svc.NewServiceContext(c)
 
-  //your code below.
-  {{.serviceName}}.RegisterHandlers(server, ctx)
+	//这里注册你其他handler，代码生成时，只注册了其中一个！
+	{{.serviceName}}.RegisterHandlers(server, ctx)
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
