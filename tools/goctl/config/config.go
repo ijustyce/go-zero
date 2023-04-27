@@ -6,7 +6,7 @@ import (
 )
 
 // DefaultFormat defines a default naming style
-const DefaultFormat = "gozero"
+const DefaultFormat = "goZero"
 
 // Config defines the file naming style
 type Config struct {

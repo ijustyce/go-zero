@@ -7,7 +7,6 @@ import (
 
 	"github.com/zeromicro/go-zero/tools/goctl/api/spec"
 	"github.com/zeromicro/go-zero/tools/goctl/config"
-	"github.com/zeromicro/go-zero/tools/goctl/util/format"
 	"github.com/zeromicro/go-zero/tools/goctl/util/pathx"
 	"github.com/zeromicro/go-zero/tools/goctl/vars"
 )
@@ -15,39 +14,59 @@ import (
 //go:embed main.tpl
 var mainTemplate string
 
-func genMain(dir, rootPkg string, cfg *config.Config, api *spec.ApiSpec) error {
-	name := strings.ToLower(api.Service.Name)
-	filename, err := format.FileNamingFormat(cfg.NamingFormat, name)
-	if err != nil {
-		return err
-	}
-
-	configName := filename
-	if strings.HasSuffix(filename, "-api") {
-		filename = strings.ReplaceAll(filename, "-api", "")
-	}
+func genSubMain(dir, rootPkg, moduleName string, cfg *config.Config, api *spec.ApiSpec) error {
+	arr := strings.Split(rootPkg, "/")
+	packageName := arr[len(arr)-1]
 
 	return genFile(fileGenConfig{
 		dir:             dir,
 		subdir:          "",
-		filename:        filename + ".go",
+		filename:        packageName + ".go",
+		templateName:    "mainTemplate",
+		category:        category,
+		templateFile:    subMainTemplateFile,
+		builtinTemplate: mainTemplate,
+		data: map[string]string{
+			"importPackages": genSubMainImports(rootPkg, moduleName),
+			"packageName":    packageName,
+		},
+	})
+}
+
+func genSubMainImports(parentPkg, moduleName string) string {
+	var imports []string
+	imports = append(imports, fmt.Sprintf("\"%s\"", pathx.JoinPackages(parentPkg, handlerDir)))
+	imports = append(imports, fmt.Sprintf("\"%s\"\n", pathx.JoinPackages(moduleName, contextDir)))
+	imports = append(imports, fmt.Sprintf("\"%s/rest\"", vars.ProjectOpenSourceURL))
+	return strings.Join(imports, "\n\t")
+}
+
+func genMain(dir, rootPkg, moduleName string, cfg *config.Config, api *spec.ApiSpec) error {
+	arr := strings.Split(rootPkg, "/")
+	serviceName := arr[len(arr)-1]
+
+	return genFile(fileGenConfig{
+		dir:             dir,
+		subdir:          "",
+		filename:        moduleName + ".go",
 		templateName:    "mainTemplate",
 		category:        category,
 		templateFile:    mainTemplateFile,
 		builtinTemplate: mainTemplate,
 		data: map[string]string{
-			"importPackages": genMainImports(rootPkg),
-			"serviceName":    configName,
+			"importPackages": genMainImports(rootPkg, moduleName),
+			"packageName":    "main",
+			"serviceName":    serviceName,
 		},
 	})
 }
 
-func genMainImports(parentPkg string) string {
+func genMainImports(parentPkg, moduleName string) string {
 	var imports []string
-	imports = append(imports, fmt.Sprintf("\"%s\"", pathx.JoinPackages(parentPkg, configDir)))
-	imports = append(imports, fmt.Sprintf("\"%s\"", pathx.JoinPackages(parentPkg, handlerDir)))
-	imports = append(imports, fmt.Sprintf("\"%s\"\n", pathx.JoinPackages(parentPkg, contextDir)))
-	imports = append(imports, fmt.Sprintf("\"%s/core/conf\"", vars.ProjectOpenSourceURL))
+	imports = append(imports, fmt.Sprintf("\"%s\"", parentPkg))
+	imports = append(imports, fmt.Sprintf("\"%s\"", pathx.JoinPackages(moduleName, configDir)))
+	imports = append(imports, fmt.Sprintf("\"%s\"\n", pathx.JoinPackages(moduleName, contextDir)))
 	imports = append(imports, fmt.Sprintf("\"%s/rest\"", vars.ProjectOpenSourceURL))
+	imports = append(imports, fmt.Sprintf("\"%s/core/conf\"", vars.ProjectOpenSourceURL))
 	return strings.Join(imports, "\n\t")
 }

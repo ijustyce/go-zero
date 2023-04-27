@@ -74,7 +74,7 @@ type (
 	}
 )
 
-func genRoutes(dir, rootPkg string, cfg *config.Config, api *spec.ApiSpec) error {
+func genRoutes(dir, rootPkg string, moduleName string, cfg *config.Config, api *spec.ApiSpec) error {
 	var builder strings.Builder
 	groups, err := getRoutes(api)
 	if err != nil {
@@ -189,15 +189,15 @@ rest.WithPrefix("%s"),`, g.prefix)
 		builtinTemplate: routesTemplate,
 		data: map[string]any{
 			"hasTimeout":      hasTimeout,
-			"importPackages":  genRouteImports(rootPkg, api),
+			"importPackages":  genRouteImports(rootPkg, moduleName, api),
 			"routesAdditions": strings.TrimSpace(builder.String()),
 		},
 	})
 }
 
-func genRouteImports(parentPkg string, api *spec.ApiSpec) string {
+func genRouteImports(parentPkg, moduleName string, api *spec.ApiSpec) string {
 	importSet := collection.NewSet()
-	importSet.AddStr(fmt.Sprintf("\"%s\"", pathx.JoinPackages(parentPkg, contextDir)))
+	importSet.AddStr(fmt.Sprintf("\"%s\"", pathx.JoinPackages(moduleName, contextDir)))
 	for _, group := range api.Service.Groups {
 		for _, route := range group.Routes {
 			folder := route.GetAnnotation(groupProperty)

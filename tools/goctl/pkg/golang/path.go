@@ -8,17 +8,21 @@ import (
 	"github.com/zeromicro/go-zero/tools/goctl/util/pathx"
 )
 
-func GetParentPackage(dir string) (string, error) {
+func GetProjectContext(dir string) (*ctx.ProjectContext, error) {
 	abs, err := filepath.Abs(dir)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	projectCtx, err := ctx.Prepare(abs)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
+	return projectCtx, nil
+}
+
+func GetParentPackageByCtx(projectCtx *ctx.ProjectContext) (string, error) {
 	// fix https://github.com/zeromicro/go-zero/issues/1058
 	wd := projectCtx.WorkDir
 	d := projectCtx.Dir
@@ -33,4 +37,13 @@ func GetParentPackage(dir string) (string, error) {
 	}
 
 	return filepath.ToSlash(filepath.Join(projectCtx.Path, trim)), nil
+}
+
+func GetParentPackage(dir string) (string, error) {
+	projectCtx, err := GetProjectContext(dir)
+	if err != nil {
+		return "", err
+	}
+
+	return GetParentPackageByCtx(projectCtx)
 }

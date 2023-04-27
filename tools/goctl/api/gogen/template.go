@@ -14,6 +14,7 @@ const (
 	handlerTemplateFile         = "handler.tpl"
 	logicTemplateFile           = "logic.tpl"
 	mainTemplateFile            = "main.tpl"
+	subMainTemplateFile         = "sub-main.tpl"
 	middlewareImplementCodeFile = "middleware.tpl"
 	routesTemplateFile          = "routes.tpl"
 	routesAdditionTemplateFile  = "route-addition.tpl"

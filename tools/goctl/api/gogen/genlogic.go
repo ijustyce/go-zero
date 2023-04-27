@@ -18,10 +18,10 @@ import (
 //go:embed logic.tpl
 var logicTemplate string
 
-func genLogic(dir, rootPkg string, cfg *config.Config, api *spec.ApiSpec) error {
+func genLogic(dir, rootPkg, moduleName string, cfg *config.Config, api *spec.ApiSpec) error {
 	for _, g := range api.Service.Groups {
 		for _, r := range g.Routes {
-			err := genLogicByRoute(dir, rootPkg, cfg, g, r)
+			err := genLogicByRoute(dir, rootPkg, moduleName, cfg, g, r)
 			if err != nil {
 				return err
 			}
@@ -30,14 +30,14 @@ func genLogic(dir, rootPkg string, cfg *config.Config, api *spec.ApiSpec) error 
 	return nil
 }
 
-func genLogicByRoute(dir, rootPkg string, cfg *config.Config, group spec.Group, route spec.Route) error {
+func genLogicByRoute(dir, rootPkg, moduleName string, cfg *config.Config, group spec.Group, route spec.Route) error {
 	logic := getLogicName(route)
 	goFile, err := format.FileNamingFormat(cfg.NamingFormat, logic)
 	if err != nil {
 		return err
 	}
 
-	imports := genLogicImports(route, rootPkg)
+	imports := genLogicImports(route, rootPkg, moduleName)
 	var responseString string
 	var returnString string
 	var requestString string
@@ -87,10 +87,10 @@ func getLogicFolderPath(group spec.Group, route spec.Route) string {
 	return path.Join(logicDir, folder)
 }
 
-func genLogicImports(route spec.Route, parentPkg string) string {
+func genLogicImports(route spec.Route, parentPkg, moduleName string) string {
 	var imports []string
 	imports = append(imports, `"context"`+"\n")
-	imports = append(imports, fmt.Sprintf("\"%s\"", pathx.JoinPackages(parentPkg, contextDir)))
+	imports = append(imports, fmt.Sprintf("\"%s\"", pathx.JoinPackages(moduleName, contextDir)))
 	if shallImportTypesPackage(route) {
 		imports = append(imports, fmt.Sprintf("\"%s\"\n", pathx.JoinPackages(parentPkg, typesDir)))
 	}

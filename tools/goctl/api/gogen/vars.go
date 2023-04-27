@@ -3,8 +3,8 @@ package gogen
 const (
 	internal      = "internal/"
 	typesPacket   = "types"
-	configDir     = internal + "config"
-	contextDir    = internal + "svc"
+	configDir     = "config"
+	contextDir    = "svc"
 	handlerDir    = internal + "handler"
 	logicDir      = internal + "logic"
 	middlewareDir = internal + "middleware"
