@@ -104,6 +104,7 @@ func DoGenProject(apiFile, dir, style string) error {
 	logx.Must(genTypes(dir, cfg, api))
 	logx.Must(genRoutes(dir, rootPkg, projectCtx.Path, cfg, api))
 	logx.Must(genHandlers(dir, rootPkg, projectCtx.Path, cfg, api))
+	logx.Must(genGlobalHandler(projectCtx.Dir, cfg, api))
 	logx.Must(genLogic(dir, rootPkg, projectCtx.Path, cfg, api))
 	logx.Must(genMiddleware(dir, cfg, api))
 
