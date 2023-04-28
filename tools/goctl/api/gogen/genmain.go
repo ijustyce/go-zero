@@ -3,6 +3,7 @@ package gogen
 import (
 	_ "embed"
 	"fmt"
+	"path/filepath"
 	"strings"
 
 	"github.com/zeromicro/go-zero/tools/goctl/api/spec"
@@ -15,8 +16,7 @@ import (
 var mainTemplate string
 
 func genMain(dir, rootPkg, moduleName string, cfg *config.Config, api *spec.ApiSpec) error {
-	arr := strings.Split(rootPkg, "/")
-	serviceName := arr[len(arr)-1]
+	_, serviceName := filepath.Split(rootPkg)
 
 	return genFile(fileGenConfig{
 		dir:             dir,

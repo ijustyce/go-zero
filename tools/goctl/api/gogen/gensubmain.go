@@ -7,6 +7,7 @@ import (
 	"github.com/zeromicro/go-zero/tools/goctl/config"
 	"github.com/zeromicro/go-zero/tools/goctl/util/pathx"
 	"github.com/zeromicro/go-zero/tools/goctl/vars"
+	"path/filepath"
 	"strings"
 )
 
@@ -14,8 +15,7 @@ import (
 var subMainTemplate string
 
 func genSubMain(dir, rootPkg, moduleName string, cfg *config.Config, api *spec.ApiSpec) error {
-	arr := strings.Split(rootPkg, "/")
-	packageName := arr[len(arr)-1]
+	_, packageName := filepath.Split(rootPkg)
 
 	return genFile(fileGenConfig{
 		dir:             dir,
