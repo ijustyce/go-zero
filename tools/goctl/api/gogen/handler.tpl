@@ -8,15 +8,15 @@ import (
 )
 
 func {{.HandlerName}}(svcCtx *svc.ServiceContext) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		{{if .HasRequest}}var req types.{{.RequestType}}
-		if err := httpx.Parse(r, &req); err != nil {
-			rest.OnError(err, w, r)
+	return func(writer http.ResponseWriter, req *http.Request) {
+		{{if .HasRequest}}var params types.{{.RequestType}}
+		if err := httpx.Parse(req, &params); err != nil {
+			rest.OnError(err, writer, req)
 			return
 		}
 
-		{{end}}l := {{.LogicName}}.New{{.LogicType}}(r, svcCtx)
-		{{if .HasResp}}resp, {{end}}err := l.{{.Call}}({{if .HasRequest}}&req{{end}})
-		rest.Handler({{if .HasResp}}resp, {{else}}nil, {{end}}err, w, r)
+		{{end}}logicObj := {{.LogicName}}.New{{.LogicType}}(req, svcCtx)
+		{{if .HasResp}}resp, {{end}}err := logicObj.{{.Call}}({{if .HasRequest}}&params{{end}})
+		rest.Handler({{if .HasResp}}resp, {{else}}nil, {{end}}err, writer, req)
 	}
 }

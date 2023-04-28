@@ -4,14 +4,14 @@ import (
 	{{.importPackages}}
 )
 
-func Handler(resp any, err error, w http.ResponseWriter, r *http.Request) {
+func Handler(resp any, err error, writer http.ResponseWriter, req *http.Request) {
 	if err != nil {
-		httpx.ErrorCtx(r.Context(), w, err)
+		httpx.ErrorCtx(req.Context(), writer, err)
 	} else {
-		httpx.OkJsonCtx(r.Context(), w, resp)
+		httpx.OkJsonCtx(req.Context(), writer, resp)
 	}
 }
 
-func OnError(err error, w http.ResponseWriter, r *http.Request) {
-	httpx.ErrorCtx(r.Context(), w, err)
+func OnError(err error, writer http.ResponseWriter, req *http.Request) {
+	httpx.ErrorCtx(req.Context(), writer, err)
 }
