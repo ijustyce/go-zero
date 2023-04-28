@@ -11,3 +11,7 @@ func Handler(resp any, err error, w http.ResponseWriter, r *http.Request) {
 		httpx.OkJsonCtx(r.Context(), w, resp)
 	}
 }
+
+func OnError(err error, w http.ResponseWriter, r *http.Request) {
+	httpx.ErrorCtx(r.Context(), w, err)
+}
