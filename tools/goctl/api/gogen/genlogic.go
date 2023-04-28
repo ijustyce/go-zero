@@ -50,7 +50,7 @@ func genLogicByRoute(dir, rootPkg, moduleName string, cfg *config.Config, group 
 		returnString = "return nil"
 	}
 	if len(route.RequestTypeName()) > 0 {
-		requestString = "req *" + requestGoTypeName(route, typesPacket)
+		requestString = "params *" + requestGoTypeName(route, typesPacket)
 	}
 
 	subDir := getLogicFolderPath(group, route)
