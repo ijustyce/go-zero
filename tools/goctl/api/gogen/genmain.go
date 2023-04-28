@@ -21,7 +21,7 @@ func genMain(dir, rootPkg, moduleName string, cfg *config.Config, api *spec.ApiS
 	return genFile(fileGenConfig{
 		dir:             dir,
 		subdir:          "",
-		filename:        moduleName + ".go",
+		filename:        strings.ReplaceAll(moduleName, "-", "_") + ".go",
 		templateName:    "mainTemplate",
 		category:        category,
 		templateFile:    mainTemplateFile,
