@@ -8,6 +8,6 @@ const (
 	handlerDir    = internal + "handler"
 	logicDir      = internal + "logic"
 	middlewareDir = internal + "middleware"
-	typesDir      = internal + typesPacket
+	typesDir      = typesPacket
 	groupProperty = "group"
 )
