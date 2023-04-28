@@ -17,7 +17,7 @@ func genGlobalHandler(dir string, cfg *config.Config, api *spec.ApiSpec) error {
 	return genFile(fileGenConfig{
 		dir:             dir,
 		subdir:          "rest",
-		filename:        "globalHandler.go",
+		filename:        "global_handler.go",
 		templateName:    "globalHandlerTemplate",
 		category:        category,
 		templateFile:    globalHandlerTemplateFile,
