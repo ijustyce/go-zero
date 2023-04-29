@@ -114,8 +114,7 @@ func responseGoTypeName(r spec.Route, pkg ...string) string {
 
 	resp := golangExpr(r.ResponseType, pkg...)
 	switch r.ResponseType.(type) {
-	case spec.DefineStruct:
-	case spec.ArrayType:
+	case spec.DefineStruct, spec.ArrayType:
 		if !strings.HasPrefix(resp, "*") {
 			return "*" + resp
 		}
