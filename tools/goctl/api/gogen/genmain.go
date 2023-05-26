@@ -30,6 +30,7 @@ func genMain(dir, rootPkg, moduleName string, cfg *config.Config, api *spec.ApiS
 			"importPackages": genMainImports(rootPkg, moduleName),
 			"packageName":    "main",
 			"serviceName":    serviceName,
+			"apiName":        api.Service.Name,
 		},
 	})
 }

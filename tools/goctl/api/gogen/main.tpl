@@ -7,7 +7,7 @@ import (
 	{{.importPackages}}
 )
 
-var configFile = flag.String("f", "etc/work-space.yaml", "the config file")
+var configFile = flag.String("f", "etc/{{.apiName}}.yaml", "the config file")
 
 func main() {
 	flag.Parse()

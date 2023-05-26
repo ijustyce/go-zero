@@ -43,7 +43,7 @@ func genLogicByRoute(dir, rootPkg, moduleName string, cfg *config.Config, group 
 	var requestString string
 	if len(route.ResponseTypeName()) > 0 {
 		resp := responseGoTypeName(route, typesPacket)
-		responseString = "(resp " + resp + ", err error)"
+		responseString = "(" + resp + ", error)"
 		returnString = "return"
 	} else {
 		responseString = "error"
@@ -89,12 +89,12 @@ func getLogicFolderPath(group spec.Group, route spec.Route) string {
 
 func genLogicImports(route spec.Route, parentPkg, moduleName string) string {
 	var imports []string
-	imports = append(imports, `"context"`+"\n")
-	imports = append(imports, `"net/http"`+"\n")
-	imports = append(imports, fmt.Sprintf("\"%s\"", pathx.JoinPackages(moduleName, contextDir)))
+	imports = append(imports, `"context"`)
 	if shallImportTypesPackage(route) {
-		imports = append(imports, fmt.Sprintf("\"%s\"\n", pathx.JoinPackages(parentPkg, typesDir)))
+		imports = append(imports, fmt.Sprintf("\"%s", pathx.JoinPackages(parentPkg, typesDir)))
 	}
+	imports = append(imports, fmt.Sprintf("\"%s\"", pathx.JoinPackages(moduleName, contextDir)))
+	imports = append(imports, `"net/http"`+"\n")
 	imports = append(imports, fmt.Sprintf("\"%s/core/logx\"", vars.ProjectOpenSourceURL))
 	return strings.Join(imports, "\n\t")
 }

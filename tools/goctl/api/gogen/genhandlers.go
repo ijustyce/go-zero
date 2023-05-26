@@ -88,13 +88,13 @@ func genHandlers(dir, rootPkg, moduleName string, cfg *config.Config, api *spec.
 
 func genHandlerImports(group spec.Group, route spec.Route, parentPkg, moduleName string) string {
 	imports := []string{
-		fmt.Sprintf("\"%s\"", pathx.JoinPackages(parentPkg, getLogicFolderPath(group, route))),
-		fmt.Sprintf("\"%s\"", pathx.JoinPackages(moduleName, contextDir)),
 		fmt.Sprintf("\"%s\"", pathx.JoinPackages(moduleName, "rest")),
+		fmt.Sprintf("\"%s\"", pathx.JoinPackages(parentPkg, getLogicFolderPath(group, route))),
 	}
 	if len(route.RequestTypeName()) > 0 {
 		imports = append(imports, fmt.Sprintf("\"%s\"\n", pathx.JoinPackages(parentPkg, typesDir)))
 	}
+	imports = append(imports, fmt.Sprintf("\"%s\"", pathx.JoinPackages(moduleName, contextDir)))
 
 	return strings.Join(imports, "\n\t")
 }

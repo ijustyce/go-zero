@@ -3,10 +3,11 @@ package gogen
 import (
 	_ "embed"
 	"fmt"
+	"strings"
+
 	"github.com/zeromicro/go-zero/tools/goctl/api/spec"
 	"github.com/zeromicro/go-zero/tools/goctl/config"
 	"github.com/zeromicro/go-zero/tools/goctl/vars"
-	"strings"
 )
 
 //go:embed global-handler.tpl
@@ -31,6 +32,5 @@ func genGlobalHandler(dir string, cfg *config.Config, api *spec.ApiSpec) error {
 func genGlobalHandlerImports() string {
 	var imports []string
 	imports = append(imports, fmt.Sprintf("\"%s/rest/httpx\"", vars.ProjectOpenSourceURL))
-	imports = append(imports, "\"net/http\"")
 	return strings.Join(imports, "\n\t")
 }

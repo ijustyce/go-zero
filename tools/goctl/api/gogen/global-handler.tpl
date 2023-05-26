@@ -1,6 +1,8 @@
 package rest
 
 import (
+	"net/http"
+
 	{{.importPackages}}
 )
 
