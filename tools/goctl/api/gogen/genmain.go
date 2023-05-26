@@ -8,6 +8,7 @@ import (
 
 	"github.com/zeromicro/go-zero/tools/goctl/api/spec"
 	"github.com/zeromicro/go-zero/tools/goctl/config"
+	"github.com/zeromicro/go-zero/tools/goctl/util/format"
 	"github.com/zeromicro/go-zero/tools/goctl/util/pathx"
 	"github.com/zeromicro/go-zero/tools/goctl/vars"
 )
@@ -17,6 +18,10 @@ var mainTemplate string
 
 func genMain(dir, rootPkg, moduleName string, cfg *config.Config, api *spec.ApiSpec) error {
 	_, serviceName := filepath.Split(rootPkg)
+	apiName, err := format.FileNamingFormat(cfg.NamingFormat, api.Service.Name)
+	if err != nil {
+		return err
+	}
 
 	return genFile(fileGenConfig{
 		dir:             dir,
@@ -30,7 +35,7 @@ func genMain(dir, rootPkg, moduleName string, cfg *config.Config, api *spec.ApiS
 			"importPackages": genMainImports(rootPkg, moduleName),
 			"packageName":    "main",
 			"serviceName":    serviceName,
-			"apiName":        api.Service.Name,
+			"apiName":        apiName,
 		},
 	})
 }
