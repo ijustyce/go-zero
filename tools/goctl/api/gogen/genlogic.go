@@ -91,7 +91,7 @@ func genLogicImports(route spec.Route, parentPkg, moduleName string) string {
 	var imports []string
 	imports = append(imports, `"context"`)
 	if shallImportTypesPackage(route) {
-		imports = append(imports, fmt.Sprintf("\"%s", pathx.JoinPackages(parentPkg, typesDir)))
+		imports = append(imports, fmt.Sprintf("\"%s\"", pathx.JoinPackages(parentPkg, typesDir)))
 	}
 	imports = append(imports, fmt.Sprintf("\"%s\"", pathx.JoinPackages(moduleName, contextDir)))
 	imports = append(imports, `"net/http"`+"\n")
