@@ -19,6 +19,7 @@ const (
 	serverTemplateFile                = "server.tpl"
 	serverFuncTemplateFile            = "server-func.tpl"
 	svcTemplateFile                   = "svc.tpl"
+	clientTemplateFile                = "client.tpl"
 	rpcTemplateFile                   = "template.tpl"
 )
 

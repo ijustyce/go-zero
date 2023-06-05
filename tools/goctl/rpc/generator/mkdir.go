@@ -93,24 +93,28 @@ func mkdir(ctx *ctx.ProjectContext, proto parser.Proto, _ *conf.Config, c *ZRpcC
 			callDir = filepath.Join(ctx.WorkDir,
 				strings.ToLower(stringx.From(proto.Service[0].Name+"_client").ToCamel()))
 		}
-		inner[call] = Dir{
-			Filename: callDir,
-			Package: filepath.ToSlash(filepath.Join(ctx.Path,
-				strings.TrimPrefix(callDir, ctx.Dir))),
-			Base: filepath.Base(callDir),
-			GetChildPackage: func(childPath string) (string, error) {
-				return getChildPackage(callDir, childPath)
-			},
+		if c.ClientOnly {
+			inner[call] = Dir{
+				Filename: callDir,
+				Package: filepath.ToSlash(filepath.Join(ctx.Path,
+					strings.TrimPrefix(callDir, ctx.Dir))),
+				Base: filepath.Base(callDir),
+				GetChildPackage: func(childPath string) (string, error) {
+					return getChildPackage(callDir, childPath)
+				},
+			}
 		}
 	} else {
-		inner[call] = Dir{
-			Filename: clientDir,
-			Package: filepath.ToSlash(filepath.Join(ctx.Path,
-				strings.TrimPrefix(clientDir, ctx.Dir))),
-			Base: filepath.Base(clientDir),
-			GetChildPackage: func(childPath string) (string, error) {
-				return getChildPackage(clientDir, childPath)
-			},
+		if c.ClientOnly {
+			inner[call] = Dir{
+				Filename: clientDir,
+				Package: filepath.ToSlash(filepath.Join(ctx.Path,
+					strings.TrimPrefix(clientDir, ctx.Dir))),
+				Base: filepath.Base(clientDir),
+				GetChildPackage: func(childPath string) (string, error) {
+					return getChildPackage(clientDir, childPath)
+				},
+			}
 		}
 	}
 
@@ -123,54 +127,57 @@ func mkdir(ctx *ctx.ProjectContext, proto parser.Proto, _ *conf.Config, c *ZRpcC
 			return getChildPackage(ctx.WorkDir, childPath)
 		},
 	}
-	inner[etc] = Dir{
-		Filename: etcDir,
-		Package:  filepath.ToSlash(filepath.Join(ctx.Path, strings.TrimPrefix(etcDir, ctx.Dir))),
-		Base:     filepath.Base(etcDir),
-		GetChildPackage: func(childPath string) (string, error) {
-			return getChildPackage(etcDir, childPath)
-		},
-	}
-	inner[internal] = Dir{
-		Filename: internalDir,
-		Package: filepath.ToSlash(filepath.Join(ctx.Path,
-			strings.TrimPrefix(internalDir, ctx.Dir))),
-		Base: filepath.Base(internalDir),
-		GetChildPackage: func(childPath string) (string, error) {
-			return getChildPackage(internalDir, childPath)
-		},
-	}
-	inner[config] = Dir{
-		Filename: configDir,
-		Package:  filepath.ToSlash(filepath.Join(ctx.Path, strings.TrimPrefix(configDir, ctx.Dir))),
-		Base:     filepath.Base(configDir),
-		GetChildPackage: func(childPath string) (string, error) {
-			return getChildPackage(configDir, childPath)
-		},
-	}
-	inner[logic] = Dir{
-		Filename: logicDir,
-		Package:  filepath.ToSlash(filepath.Join(ctx.Path, strings.TrimPrefix(logicDir, ctx.Dir))),
-		Base:     filepath.Base(logicDir),
-		GetChildPackage: func(childPath string) (string, error) {
-			return getChildPackage(logicDir, childPath)
-		},
-	}
-	inner[server] = Dir{
-		Filename: serverDir,
-		Package:  filepath.ToSlash(filepath.Join(ctx.Path, strings.TrimPrefix(serverDir, ctx.Dir))),
-		Base:     filepath.Base(serverDir),
-		GetChildPackage: func(childPath string) (string, error) {
-			return getChildPackage(serverDir, childPath)
-		},
-	}
-	inner[svc] = Dir{
-		Filename: svcDir,
-		Package:  filepath.ToSlash(filepath.Join(ctx.Path, strings.TrimPrefix(svcDir, ctx.Dir))),
-		Base:     filepath.Base(svcDir),
-		GetChildPackage: func(childPath string) (string, error) {
-			return getChildPackage(svcDir, childPath)
-		},
+
+	if !c.ClientOnly {
+		inner[etc] = Dir{
+			Filename: etcDir,
+			Package:  filepath.ToSlash(filepath.Join(ctx.Path, strings.TrimPrefix(etcDir, ctx.Dir))),
+			Base:     filepath.Base(etcDir),
+			GetChildPackage: func(childPath string) (string, error) {
+				return getChildPackage(etcDir, childPath)
+			},
+		}
+		inner[internal] = Dir{
+			Filename: internalDir,
+			Package: filepath.ToSlash(filepath.Join(ctx.Path,
+				strings.TrimPrefix(internalDir, ctx.Dir))),
+			Base: filepath.Base(internalDir),
+			GetChildPackage: func(childPath string) (string, error) {
+				return getChildPackage(internalDir, childPath)
+			},
+		}
+		inner[config] = Dir{
+			Filename: configDir,
+			Package:  filepath.ToSlash(filepath.Join(ctx.Path, strings.TrimPrefix(configDir, ctx.Dir))),
+			Base:     filepath.Base(configDir),
+			GetChildPackage: func(childPath string) (string, error) {
+				return getChildPackage(configDir, childPath)
+			},
+		}
+		inner[logic] = Dir{
+			Filename: logicDir,
+			Package:  filepath.ToSlash(filepath.Join(ctx.Path, strings.TrimPrefix(logicDir, ctx.Dir))),
+			Base:     filepath.Base(logicDir),
+			GetChildPackage: func(childPath string) (string, error) {
+				return getChildPackage(logicDir, childPath)
+			},
+		}
+		inner[server] = Dir{
+			Filename: serverDir,
+			Package:  filepath.ToSlash(filepath.Join(ctx.Path, strings.TrimPrefix(serverDir, ctx.Dir))),
+			Base:     filepath.Base(serverDir),
+			GetChildPackage: func(childPath string) (string, error) {
+				return getChildPackage(serverDir, childPath)
+			},
+		}
+		inner[svc] = Dir{
+			Filename: svcDir,
+			Package:  filepath.ToSlash(filepath.Join(ctx.Path, strings.TrimPrefix(svcDir, ctx.Dir))),
+			Base:     filepath.Base(svcDir),
+			GetChildPackage: func(childPath string) (string, error) {
+				return getChildPackage(svcDir, childPath)
+			},
+		}
 	}
 
 	inner[pb] = Dir{

@@ -44,6 +44,8 @@ var (
 	VarBoolVerbose bool
 	// VarBoolMultiple describes whether support generating multiple rpc services or not.
 	VarBoolMultiple bool
+	//	VarBoolClientOnly describes whether generate client code only.
+	VarBoolClientOnly bool
 )
 
 // RPCNew is to generate rpc greet service, this greet service can speed

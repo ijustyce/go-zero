@@ -45,6 +45,7 @@ func init() {
 	newCmdFlags.MarkHidden("go-grpc_opt")
 
 	protocCmdFlags.BoolVarP(&cli.VarBoolMultiple, "multiple", "m")
+	protocCmdFlags.BoolVarP(&cli.VarBoolClientOnly, "client", "c")
 	protocCmdFlags.StringSliceVar(&cli.VarStringSliceGoOut, "go_out")
 	protocCmdFlags.StringSliceVar(&cli.VarStringSliceGoGRPCOut, "go-grpc_out")
 	protocCmdFlags.StringSliceVar(&cli.VarStringSliceGoOpt, "go_opt")

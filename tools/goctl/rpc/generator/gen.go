@@ -28,6 +28,8 @@ type ZRpcContext struct {
 	Output string
 	// Multiple is the flag to indicate whether the proto file is generated in multiple mode.
 	Multiple bool
+	//	ClientOnly is the flag to indicate whether only generate client code.
+	ClientOnly bool
 }
 
 // Generate generates a rpc service, through the proto file,
@@ -65,42 +67,45 @@ func (g *Generator) Generate(zctx *ZRpcContext) error {
 		return err
 	}
 
-	err = g.GenEtc(dirCtx, proto, g.cfg)
-	if err != nil {
-		return err
-	}
-
 	err = g.GenPb(dirCtx, zctx)
 	if err != nil {
 		return err
 	}
 
-	err = g.GenConfig(dirCtx, proto, g.cfg)
-	if err != nil {
-		return err
-	}
+	if !zctx.ClientOnly {
+		err = g.GenEtc(dirCtx, proto, g.cfg)
+		if err != nil {
+			return err
+		}
 
-	err = g.GenSvc(dirCtx, proto, g.cfg)
-	if err != nil {
-		return err
-	}
+		err = g.GenConfig(dirCtx, proto, g.cfg)
+		if err != nil {
+			return err
+		}
 
-	err = g.GenLogic(dirCtx, proto, g.cfg, zctx)
-	if err != nil {
-		return err
-	}
+		err = g.GenSvc(dirCtx, proto, g.cfg)
+		if err != nil {
+			return err
+		}
 
-	err = g.GenServer(dirCtx, proto, g.cfg, zctx)
-	if err != nil {
-		return err
-	}
+		err = g.GenLogic(dirCtx, proto, g.cfg, zctx)
+		if err != nil {
+			return err
+		}
 
-	err = g.GenMain(dirCtx, proto, g.cfg, zctx)
-	if err != nil {
-		return err
-	}
+		err = g.GenServer(dirCtx, proto, g.cfg, zctx)
+		if err != nil {
+			return err
+		}
 
-	err = g.GenCall(dirCtx, proto, g.cfg, zctx)
+		err = g.GenMain(dirCtx, proto, g.cfg, zctx)
+		if err != nil {
+			return err
+		}
+	} else {
+		err = g.GenCall(dirCtx, proto, g.cfg, zctx)
+		err = g.GenClient(dirCtx, proto, g.cfg, zctx)
+	}
 
 	console.NewColorConsole().MarkDone()
 
