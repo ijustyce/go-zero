@@ -98,7 +98,7 @@ func (g *Generator) Generate(zctx *ZRpcContext) error {
 			return err
 		}
 
-		err = g.GenMain(dirCtx, proto, g.cfg, zctx)
+		err = g.GenMain(projectCtx, dirCtx, proto, g.cfg, zctx)
 		if err != nil {
 			return err
 		}

@@ -13,7 +13,7 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "etc/{{.serviceName}}.yaml", "the config file")
+var configFile = flag.String("f", ".{{.path}}/etc/{{.serviceName}}.yaml", "the config file")
 
 func main() {
 	flag.Parse()

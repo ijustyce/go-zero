@@ -9,6 +9,7 @@ import (
 	conf "github.com/zeromicro/go-zero/tools/goctl/config"
 	"github.com/zeromicro/go-zero/tools/goctl/rpc/parser"
 	"github.com/zeromicro/go-zero/tools/goctl/util"
+	"github.com/zeromicro/go-zero/tools/goctl/util/ctx"
 	"github.com/zeromicro/go-zero/tools/goctl/util/format"
 	"github.com/zeromicro/go-zero/tools/goctl/util/pathx"
 )
@@ -23,7 +24,7 @@ type MainServiceTemplateData struct {
 }
 
 // GenMain generates the main file of the rpc service, which is an rpc service program call entry
-func (g *Generator) GenMain(ctx DirContext, proto parser.Proto, cfg *conf.Config,
+func (g *Generator) GenMain(pCtx *ctx.ProjectContext, ctx DirContext, proto parser.Proto, cfg *conf.Config,
 	c *ZRpcContext) error {
 	mainFilename, err := format.FileNamingFormat(cfg.NamingFormat, ctx.GetServiceName().Source())
 	if err != nil {
@@ -75,6 +76,7 @@ func (g *Generator) GenMain(ctx DirContext, proto parser.Proto, cfg *conf.Config
 
 	return util.With("main").GoFmt(true).Parse(text).SaveTo(map[string]any{
 		"serviceName":  etcFileName,
+		"path":         pCtx.WorkDir[len(pCtx.Dir):],
 		"imports":      strings.Join(imports, pathx.NL),
 		"pkg":          proto.PbPackage,
 		"serviceNames": serviceNames,
